@@ -1,59 +1,48 @@
-import { ApiTransaction } from '@/app/services/transaction'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { ApiTransaction } from '@/app/services/transaction';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
-// Definindo a chave da query
-const QUERY_KEY = 'qkTransaction'
+const QUERY_KEY = 'qkTransaction';
 
-// Função para criar transações
 const Create = () => {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   return useMutation(ApiTransaction.create, {
     onSuccess: () => {
-      queryClient.invalidateQueries(QUERY_KEY)
+      queryClient.invalidateQueries(QUERY_KEY);
     }
-  })
-}
+  });
+};
 
-// Função para listar todas as transações
 const ListAll = () => {
-  return useQuery([QUERY_KEY], () => ApiTransaction.listAll())
-}
+  return useQuery([QUERY_KEY], () => ApiTransaction.listAll());
+};
 
-// Função para atualizar uma transação
+const FindOne = (id: string) => {
+  return useQuery([QUERY_KEY, id], () => ApiTransaction.findOne(id));
+};
+
 const Update = () => {
-  const queryClient = useQueryClient()
-  return useMutation((updatedTransaction: ITransaction) => ApiTransaction.update(updatedTransaction), {
+  const queryClient = useQueryClient();
+  return useMutation(ApiTransaction.update, {
     onSuccess: () => {
-      queryClient.invalidateQueries(QUERY_KEY)
+      queryClient.invalidateQueries(QUERY_KEY);
     }
-  })
-}
+  });
+};
 
-// Função para remover uma transação (caso você tenha uma implementação específica)
-const Remove = () => {
-  const queryClient = useQueryClient()
-  return useMutation((id: string) => ApiTransaction.remove(id), {
-    onSuccess: () => {
-      queryClient.invalidateQueries(QUERY_KEY)
-    }
-  })
-}
-
-// Função para excluir uma transação
 const Delete = () => {
-  const queryClient = useQueryClient()
-  return useMutation((id: string) => ApiTransaction.delete(id), {
+  const queryClient = useQueryClient();
+  return useMutation(ApiTransaction.delete, {
     onSuccess: () => {
-      queryClient.invalidateQueries(QUERY_KEY)
+      queryClient.invalidateQueries(QUERY_KEY);
     }
-  })
-}
+  });
+};
 
-// Exportando todos os métodos do hook useTransaction
 export const useTransaction = {
   Create,
-  Update,
   ListAll,
-  Remove,
+  FindOne,
+  Update,
   Delete
-}
+};
+
