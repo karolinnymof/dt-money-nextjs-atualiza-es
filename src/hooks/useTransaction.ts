@@ -1,11 +1,12 @@
 import { ApiTransaction } from '@/app/services/transaction'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
+// Definindo a chave da query
 const QUERY_KEY = 'qkTransaction'
 
+// Função para criar transações
 const Create = () => {
   const queryClient = useQueryClient()
-
   return useMutation(ApiTransaction.create, {
     onSuccess: () => {
       queryClient.invalidateQueries(QUERY_KEY)
@@ -13,56 +14,46 @@ const Create = () => {
   })
 }
 
+// Função para listar todas as transações
 const ListAll = () => {
   return useQuery([QUERY_KEY], () => ApiTransaction.listAll())
 }
 
-export const useTransaction = {
-    Create,
-    ListAll,
-}
-
-/*
-
-const FindOne = (id: string) => {
-  return useQuery([QUERY_KEY, id], () => ApiTransaction.findOne(id))
-}
-
+// Função para atualizar uma transação
 const Update = () => {
   const queryClient = useQueryClient()
-
-  return useMutation(ApiTransaction.update, {
+  return useMutation((updatedTransaction: ITransaction) => ApiTransaction.update(updatedTransaction), {
     onSuccess: () => {
       queryClient.invalidateQueries(QUERY_KEY)
     }
   })
 }
 
+// Função para remover uma transação (caso você tenha uma implementação específica)
 const Remove = () => {
   const queryClient = useQueryClient()
-
-  return useMutation(ApiTransaction.remove, {
+  return useMutation((id: string) => ApiTransaction.remove(id), {
     onSuccess: () => {
       queryClient.invalidateQueries(QUERY_KEY)
     }
   })
 }
 
+// Função para excluir uma transação
 const Delete = () => {
-    const queryClient = useQueryClient()
-  
-    return useMutation(ApiTransaction.delete, {
-      onSuccess: () => {
-        queryClient.invalidateQueries(QUERY_KEY)
-      }
-    })
-  }
+  const queryClient = useQueryClient()
+  return useMutation((id: string) => ApiTransaction.delete(id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(QUERY_KEY)
+    }
+  })
+}
 
+// Exportando todos os métodos do hook useTransaction
 export const useTransaction = {
   Create,
   Update,
-  FindOne,
   ListAll,
   Remove,
   Delete
-} */
+}
